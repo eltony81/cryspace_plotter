@@ -95,6 +95,17 @@ $$
 sys_cl = (rlc_plant * pid_controller).feedback([[1.0]].to_tensor)
 ```
 
+#### Explanation of `[[1.0]].to_tensor`
+The `.feedback` method in the `StateSpace` class closes the loop by subtracting the output scaled by a feedback gain matrix $H$ from the input:
+$$
+e(t) = r(t) - H y(t)
+$$
+
+For a **SISO** (Single-Input Single-Output) system where we want a **unity feedback loop** (meaning the output $y(t)$ is directly compared to the reference $r(t)$ to calculate the error $e(t) = r(t) - y(t)$):
+1. **Unity Factor**: The feedback factor $H$ must be exactly $1.0$.
+2. **Matrix Dimensions**: The feedback gain must be a $1 \times 1$ matrix (matching the 1 output and 1 input of our SISO system).
+3. **Syntax**: In the Crystal `num` tensor library, a $1 \times 1$ matrix is represented as a nested array `[[1.0]]` and converted via `.to_tensor`.
+
 ---
 
 ## PID Tuning Parameters
