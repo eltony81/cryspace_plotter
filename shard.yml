@@ -1,0 +1,17 @@
+name: plotter
+version: 0.1.0
+
+authors:
+  - tony <antonio.difluri@gmail.com>
+
+targets:
+  plotter:
+    main: src/plotter.cr
+
+crystal: '>= 1.20.2'
+
+license: MIT
+
+dependencies:
+  cryspace:
+    path: /home/tony/Projects/cryspace
