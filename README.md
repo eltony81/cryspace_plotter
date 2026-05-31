@@ -18,12 +18,15 @@ y(t) = C x(t) + D u(t)
 $$
 
 With the physical parameters $R = 1.0\,\Omega$, $L = 0.5\,\text{H}$, and $C = 0.1\,\text{F}$, the matrices are:
+
 $$
-A = \begin{bmatrix} 0 & \frac{1}{C} \\\\ -\frac{1}{L} & -\frac{R}{L} \end{bmatrix} = \begin{bmatrix} 0 & 10 \\\\ -2 & -2 \end{bmatrix}
+A = \begin{bmatrix} 0 & \frac{1}{C} \\ -\frac{1}{L} & -\frac{R}{L} \end{bmatrix} = \begin{bmatrix} 0 & 10 \\ -2 & -2 \end{bmatrix}
 $$
+
 $$
-B = \begin{bmatrix} 0 \\\\ \frac{1}{L} \end{bmatrix} = \begin{bmatrix} 0 \\\\ 2 \end{bmatrix}
+B = \begin{bmatrix} 0 \\ \frac{1}{L} \end{bmatrix} = \begin{bmatrix} 0 \\ 2 \end{bmatrix}
 $$
+
 $$
 C = \begin{bmatrix} 1 & 0 \end{bmatrix}, \quad D = \begin{bmatrix} 0 \end{bmatrix}
 $$
@@ -56,9 +59,11 @@ where:
 
 #### State-Space (Controllable Canonical Form)
 `TransferFunction#to_statespace` converts the controller to:
+
 $$
-A_c = \begin{bmatrix} -a_1 & -a_2 \\\\ 1 & 0 \end{bmatrix}, \quad B_c = \begin{bmatrix} 1 \\\\ 0 \end{bmatrix}
+A_c = \begin{bmatrix} -a_1 & -a_2 \\ 1 & 0 \end{bmatrix}, \quad B_c = \begin{bmatrix} 1 \\ 0 \end{bmatrix}
 $$
+
 $$
 C_c = \begin{bmatrix} b_1 - b_0 a_1 & b_2 - b_0 a_2 \end{bmatrix}, \quad D_c = \begin{bmatrix} b_0 \end{bmatrix}
 $$
