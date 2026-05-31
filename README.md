@@ -32,6 +32,7 @@ C = \begin{bmatrix} 1 & 0 \end{bmatrix}, \quad D = \begin{bmatrix} 0 \end{bmatri
 $$
 
 #### Transfer Function
+
 $$
 G_p(s) = C(sI - A)^{-1} B + D = \frac{20}{s^2 + 2s + 20}
 $$
@@ -42,14 +43,17 @@ $$
 To make the controller physically realizable and stable against high-frequency noise, a first-order derivative filter with time constant $t_f = 0.01\,\text{s}$ is added.
 
 #### Transfer Function
+
 $$
 C_{PID}(s) = K_p + \frac{K_i}{s} + \frac{K_d s}{t_f s + 1} = \frac{(K_p t_f + K_d) s^2 + (K_p + K_i t_f) s + K_i}{t_f s^2 + s}
 $$
 
 By dividing the numerator and denominator by $t_f$ to normalize the leading denominator coefficient, we obtain:
+
 $$
 C_{PID}(s) = \frac{b_0 s^2 + b_1 s + b_2}{s^2 + a_1 s + a_2}
 $$
+
 where:
 * $b_0 = K_p + \frac{K_d}{t_f}$
 * $b_1 = \frac{K_p}{t_f} + K_i$
@@ -82,9 +86,11 @@ To track a setpoint $r(t) = 1.0$ (unit step), the controller is placed in the **
 ```
 
 In the codebase, this is constructed using series multiplication (`*`) followed by the `feedback` operator:
+
 $$
 G_{cl}(s) = \frac{G_p(s) C_{PID}(s)}{1 + G_p(s) C_{PID}(s)}
 $$
+
 ```crystal
 sys_cl = (rlc_plant * pid_controller).feedback([[1.0]].to_tensor)
 ```
