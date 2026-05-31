@@ -131,27 +131,69 @@ The simulation is executed with:
 ---
 
 ## Second Example: Complex Feedback (Sensor Dynamics)
-In real-world control systems, physical sensors do not respond instantaneously. They introduce a measurement lag (dynamics).
 
-In [src/plotter_sensor.cr](file:///home/tony/Projects/cryspace_plotter/cryspace_plotter/src/plotter_sensor.cr), we model a low-pass filter representing sensor dynamics in the feedback path:
+In real-world control systems, physical sensors do not respond instantaneously. They introduce a measurement lag (sensor dynamics).
+
+### 1. The Sensor Dynamics Model
+We model the sensor as a first-order low-pass filter with time constant $\tau_s = 0.05\,\text{s}$:
+
+#### Transfer Function
+$$
+H(s) = \frac{1}{\tau_s s + 1} = \frac{20}{s + 20}
+$$
+
+#### State-Space Representation
+$$\dot{x}_s(t) = A_s x_s(t) + B_s y(t)$$
+$$y_s(t) = C_s x_s(t) + D_s y(t)$$
+
+With the time constant $\tau_s = 0.05\,\text{s}$, the matrices are:
 
 $$
-H(s) = \frac{1}{\tau_s s + 1}
+A_s = \begin{bmatrix} -\frac{1}{\tau_s} \end{bmatrix} = \begin{bmatrix} -20 \end{bmatrix}
 $$
 
-with a measurement time constant $\tau_s = 0.05\,\text{s}$.
+$$
+B_s = \begin{bmatrix} \frac{1}{\tau_s} \end{bmatrix} = \begin{bmatrix} 20 \end{bmatrix}
+$$
 
-The closed-loop system is then:
+$$
+C_s = \begin{bmatrix} 1 \end{bmatrix}, \quad D_s = \begin{bmatrix} 0 \end{bmatrix}
+$$
+
+---
+
+### 2. Closed-Loop Connection with Sensor Lag
+The delayed output $y_s(t)$ is fed back and compared to the setpoint $r(t)$:
+
+```
+          e(t)       +-------+  u_c(t)  +-------+
+  r(t) ----(O)------>|  PID  |--------->| Plant |-----> y(t)
+            ^ -      +-------+          +-------+  |
+            |                                      |
+            |             +--------+               |
+            +-------------| Sensor |<--------------+
+                          +--------+
+```
+
+The closed-loop transfer function is:
 
 $$
 G_{cl}(s) = \frac{G_p(s) C_{PID}(s)}{1 + G_p(s) C_{PID}(s) H(s)}
 $$
 
-In code, this is closed by passing the `sensor_dynamics` state space system directly to the `.feedback` method:
+In the codebase (`src/plotter_sensor.cr`), we close this loop by passing the `sensor_dynamics` state-space system directly to the `.feedback` method:
 
 ```crystal
 sys_cl = sys_forward.feedback(sensor_dynamics)
 ```
+
+---
+
+### 3. The Control Theory Story (Why it Oscillates)
+Because the sensor dynamics $H(s)$ introduce a **phase lag** at higher frequencies:
+* The feedback signal $y_s(t)$ lags behind the real plant output $y(t)$.
+* The controller PID reacts late, applying corrections based on outdated measurements.
+* This delay reduces the **phase margin** of the feedback loop, leading to **ringing (overshoot and oscillations)** and extending the settling time compared to the ideal, instantaneous unity feedback case.
 
 ---
 
