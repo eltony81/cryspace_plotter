@@ -130,13 +130,43 @@ The simulation is executed with:
 
 ---
 
+## Second Example: Complex Feedback (Sensor Dynamics)
+In real-world control systems, physical sensors do not respond instantaneously. They introduce a measurement lag (dynamics).
+
+In [src/plotter_sensor.cr](file:///home/tony/Projects/cryspace_plotter/cryspace_plotter/src/plotter_sensor.cr), we model a low-pass filter representing sensor dynamics in the feedback path:
+
+$$
+H(s) = \frac{1}{\tau_s s + 1}
+$$
+
+with a measurement time constant $\tau_s = 0.05\,\text{s}$.
+
+The closed-loop system is then:
+
+$$
+G_{cl}(s) = \frac{G_p(s) C_{PID}(s)}{1 + G_p(s) C_{PID}(s) H(s)}
+$$
+
+In code, this is closed by passing the `sensor_dynamics` state space system directly to the `.feedback` method:
+
+```crystal
+sys_cl = sys_forward.feedback(sensor_dynamics)
+```
+
+---
+
 ## Launching the App
 1. Ensure the dependencies are installed:
    ```bash
    shards install
    ```
-2. Run the plotter:
+2. Run the first example (unity feedback):
    ```bash
    crystal run src/plotter.cr
    ```
-This generates `results.csv` and compiles the plot to `simulation_plot.png`.
+   This generates `results.csv` and compiles the plot to `simulation_plot.png`.
+3. Run the second example (with sensor dynamics lag):
+   ```bash
+   crystal run src/plotter_sensor.cr
+   ```
+   This generates `results_sensor.csv` and compiles the plot to `simulation_sensor_plot.png`.
