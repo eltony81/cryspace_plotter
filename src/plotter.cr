@@ -8,8 +8,8 @@ c = [[1.0, 0.0]].to_tensor
 d = [[0.0]].to_tensor
 rlc_plant = CrySpace::StateSpace.new(a, b, c, d)
 
-# 2. PID Controller - Guadagni stabili da UMich
-kp, ki, kd = 4.0, 8.0, 1.3
+# 2. PID Controller - Guadagni stabili da UMich (ottimizzati per basso overshoot)
+kp, ki, kd = 3.0, 5.0, 1.5
 tf = 0.01 # Filtro derivativo per stabilità
 pid_num = [(kp*tf + kd), (kp + ki*tf), ki].to_tensor
 pid_den = [tf, 1.0, 0.0].to_tensor
