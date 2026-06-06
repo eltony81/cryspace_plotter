@@ -44,4 +44,4 @@ File.open("results_sensor.csv", "w") do |file|
   1501.times { |i| file.puts "#{t_vec[i].value},#{y_open[i, 0].value},#{y_cl[i, 0].value}" }
 end
 
-system "gnuplot -e \"set datafile separator ','; set key autotitle columnheader; set term png size 800,600; set output 'simulation_sensor_plot.png'; set title 'RLC Response with Sensor Dynamics Lag'; set xlabel 'Time (s)'; set ylabel 'Voltage (V)'; set yrange [-0.2:1.6]; plot 'results_sensor.csv' using 1:2 with lines, '' using 1:3 with lines\""
+system "gnuplot -e \"set datafile separator ','; set key autotitle columnheader; set term png size 800,600; set output 'simulation_sensor_plot.png'; set title 'Closed-Loop Response with Sensor Dynamics Lag'; set xlabel 'Time (s)'; set ylabel 'Voltage (V)'; set yrange [-0.2:1.6]; plot 'results_sensor.csv' using 1:2 with lines, '' using 1:3 with lines\""
