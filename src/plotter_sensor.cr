@@ -9,7 +9,7 @@ d = [[0.0]].to_tensor
 rlc_plant = CrySpace::StateSpace.new(a, b, c, d)
 
 # 2. PID Controller (Forward Path - optimized for faster response)
-kp, ki, kd = 6.8, 4.0, 1.0
+kp, ki, kd = 1.1, 1.0, 0.4
 tf = 0.01 # Derivative filter for realizability
 pid_num = [(kp*tf + kd), (kp + ki*tf), ki].to_tensor
 pid_den = [tf, 1.0, 0.0].to_tensor
